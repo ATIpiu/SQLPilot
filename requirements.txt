@@ -1,0 +1,6 @@
+langchain
+pyside6
+openai
+PyYAML
+mysql-connector-python
+sqlite3

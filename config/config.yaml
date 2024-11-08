@@ -1,0 +1,11 @@
+database:
+  type: "sqlite"  # 支持 "sqlite" 或 "mysql"
+  sqlite_path: "data/sqlite.db"
+  mysql:
+    host: "localhost"
+    user: "root"
+    password: "password"
+    database: "test"
+
+openai:
+  api_key: "your_openai_api_key"
