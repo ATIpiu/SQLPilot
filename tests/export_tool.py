@@ -20,7 +20,7 @@ class DatabaseTool:
 
 # 使用示例
 # 准备数据库
-db_path = "../src/test.db"
+db_path = "test.db"
 connection = sqlite3.connect(db_path)
 cursor = connection.cursor()
 create_table_query = "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER)"
@@ -37,6 +37,6 @@ cursor.executemany(insert_query, test_data)
 connection.commit()
 connection.close()
 
-db_tool = DatabaseTool("../src/test.db")
+db_tool = DatabaseTool("test.db")
 structure = db_tool.get_structure_as_string()
 print(structure)

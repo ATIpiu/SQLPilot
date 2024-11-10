@@ -43,7 +43,7 @@ class DatabaseTool:
 
 
 # 准备数据库
-db_path = "../src/test.db"
+db_path = "test.db"
 connection = sqlite3.connect(db_path)
 cursor = connection.cursor()
 connection.commit()
