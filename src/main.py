@@ -160,7 +160,7 @@ class Window(MSFluentWindow):
     def initWindow(self):
         self.resize(900, 700)
         self.setWindowIcon(QIcon(':/qfluentwidgets/images/logo.png'))
-        self.setWindowTitle('聊天窗口 - PyQt-Fluent-Widgets')
+        self.setWindowTitle('SQLpilot')
 
         desktop = QApplication.desktop().availableGeometry()
         w, h = desktop.width(), desktop.height()

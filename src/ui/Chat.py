@@ -28,7 +28,7 @@ class QueryThread(QThread):
             response = erniebot.ChatCompletion.create(
                 model='ernie-4.0',
                 messages=self.messages,
-                system='你是一个智能数据库助手，这是数据库的sql语句，请你协助我完成各种操作尽可能使用一句sql完成操作,数据库的列名必须是英文' + self.sql_str,
+                system='你是一个智能数据库助手，这是数据库的sql语句' + self.sql_str+',尽可能使用单句sql完成操作,数据库的列名必须是英文,不需要解释',
                 functions=[
                     {
                         'name': 'data_option',
@@ -60,16 +60,13 @@ class QueryThread(QThread):
                         'parameters': {
                             'type': 'object',
                             'properties': {
-                                'table_name': {
-                                    'type': 'string',
-                                    'description': '要创建的表名'
-                                },
+
                                 'query': {
                                     'type': 'string',
                                     'description': '创建表的完整SQL语句',
                                 }
                             },
-                            'required': ['table_name', 'query']
+                            'required': [ 'query']
                         }
                     },
                     {
@@ -125,7 +122,6 @@ class QueryThread(QThread):
                     }
                 ]
             )
-            print('res:', response)
 
             if response.is_function_response:
                 function_call = response.get_result()
@@ -173,7 +169,7 @@ class ChatBubble(QFrame):
             # 动态调整尺寸
             content_label.document().setTextWidth(content_label.viewport().width())
             content_label.setFixedHeight(
-                int(content_label.document().size().height() + content_label.frameWidth() * 2)
+                int(content_label.document().size().height() + content_label.frameWidth() +10)
             )
 
 
@@ -358,6 +354,7 @@ class ChatWidget(QFrame):
 
     def sendMessage(self):
         """处理用户发送的消息并包含历史聊天记录"""
+        self.sql_str = self.db_tool.get_structure_as_string()
         content = self.inputField.text().strip()
         if content:
             # 将新消息添加到聊天记录
@@ -395,7 +392,6 @@ class ChatWidget(QFrame):
 
             elif function_name == 'create_table':
 
-                table_name = arguments['table_name']
 
                 query = arguments['query']
 

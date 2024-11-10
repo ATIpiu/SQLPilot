@@ -1,6 +1,8 @@
 import os
 import sqlite3
 import csv
+import re
+
 import matplotlib.pyplot as plt
 from matplotlib import font_manager, rcParams
 
@@ -9,20 +11,14 @@ class DatabaseTool:
     def __init__(self, db_path):
         self.db_path = db_path
 
-    def insert(self, sql_query, table_name):
-        """插入数据后返回表的所有数据"""
-        return self._execute_and_return_table(sql_query, table_name)
-
-    def update(self, sql_query, table_name):
-        """更新数据后返回表的所有数据"""
-        return self._execute_and_return_table(sql_query, table_name)
-
-    def delete(self, sql_query, table_name):
-        """删除数据后返回表的所有数据"""
-        return self._execute_and_return_table(sql_query, table_name)
-
     def create_table(self, query):
         """创建表"""
+        query = query.split(';')[0].strip()
+
+        if not query:
+            return "提供的查询语句为空。"
+        print("create_table:",query)
+
         try:
             connection = sqlite3.connect(self.db_path)
             cursor = connection.cursor()
@@ -62,6 +58,10 @@ class DatabaseTool:
 
     def select(self, sql_query):
         """查询数据并返回结果"""
+        sql_query = sql_query.split(';')[0].strip()
+
+        if not sql_query:
+            return "提供的查询语句为空。"
         print(f"执行查询: {sql_query}")
         try:
             connection = sqlite3.connect(self.db_path)
@@ -86,9 +86,26 @@ class DatabaseTool:
         finally:
             connection.close()
 
+
     def _execute_and_return_table(self, sql_query, table_name):
         """执行增、删、改操作后，返回对应表的所有数据以及列名"""
-        print(f"执行SQL操作: {sql_query}")
+        sql_query = sql_query.split(';')[0].strip()
+
+        if not sql_query:
+            return "提供的查询语句为空。"
+        print(f"执行查询: {sql_query}")
+        def extract_table_name(sql_query):
+            """从SQL语句中提取表名"""
+            match = re.search(r'INSERT INTO\s+(\w+)|UPDATE\s+(\w+)|DELETE FROM\s+(\w+)|SELECT\s+\*\s+FROM\s+(\w+)',
+                              sql_query, re.IGNORECASE)
+            if match:
+                return next(filter(None, match.groups()))  # 返回匹配的第一个非空表名
+            return None
+        table_name = extract_table_name(sql_query)  # 自动提取表名
+
+        print(f"执行SQL操作: {sql_query,table_name}")
+
+
         try:
             connection = sqlite3.connect(self.db_path)
             cursor = connection.cursor()
@@ -111,6 +128,7 @@ class DatabaseTool:
             else:
                 return f"表 {table_name} 当前无数据", {"columns": column_names, "data": []}
         except Exception as e:
+            print(e)
             return f"数据库错误: {str(e)}", {"columns": [], "data": []}
         finally:
             connection.close()

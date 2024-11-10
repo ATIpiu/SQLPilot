@@ -7,5 +7,6 @@ database:
     password: "password"
     database: "test"
 
-openai:
-  api_key: "your_openai_api_key"
+erniebot:
+  access_token: "03a794f63c8002be85524c48337924d4d04634fe"
+
