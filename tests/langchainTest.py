@@ -43,11 +43,9 @@ class DatabaseTool:
 
 
 # 准备数据库
-db_path = "test.db"
+db_path = "../src/test.db"
 connection = sqlite3.connect(db_path)
 cursor = connection.cursor()
-cursor.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER);")
-cursor.executemany("INSERT INTO users (name, age) VALUES (?, ?);", [("Alice", 30), ("Bob", 25), ("Charlie", 35)])
 connection.commit()
 connection.close()
 
@@ -115,11 +113,11 @@ def process_query(messages):
     else:
         return response.get_result()
 
-# 测试：插入和删除组合
-messages = [{'role': 'user', 'content': "插入一条新用户，名字是David，年龄是40，然后删除名字是Alice的用户"}]
-result = process_query(messages)
-print(f"操作结果: {result}")
-
+# # 测试：插入和删除组合
+# messages = [{'role': 'user', 'content': "我有那些数据表"}]
+# result = process_query(messages)
+# print(f"操作结果: {result}")
+#
 # 测试：导出到CSV
 messages = [{'role': 'user', 'content': "将users表导出为users.csv文件"}]
 result = process_query(messages)

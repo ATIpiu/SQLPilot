@@ -1,5 +1,7 @@
 langchain
-pyside6
+PyQt5
 openai
 PyYAML
 mysql-connector-python
+PyQt-Fluent-Widgets[full]
+matplotlib
